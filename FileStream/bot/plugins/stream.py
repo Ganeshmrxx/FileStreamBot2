@@ -35,7 +35,20 @@ async def private_receive_handler(bot: Client, message: Message):
         if not await is_user_joined(bot, message):
             return
     try:
-        i = bot.get_messages(chat_id=-1002059529731, message_ids=33554)
+
+        try:
+            
+           i = await bot.get_messages(chat_id=-1002059529731, message_ids=33554)
+           await message.reply_text(
+            text=i,
+            parse_mode=ParseMode.HTML,
+            disable_web_page_preview=True,
+            reply_markup=reply_markup,
+            quote=True
+        )
+
+        except Exception as e::
+            print("error getting message {e}")
         
         inserted_id = await db.add_file(get_file_info(message))
         await get_file_ids(False, inserted_id, multi_clients, message)
@@ -47,13 +60,7 @@ async def private_receive_handler(bot: Client, message: Message):
             reply_markup=reply_markup,
             quote=True
         )
-        await message.reply_text(
-            text=i,
-            parse_mode=ParseMode.HTML,
-            disable_web_page_preview=True,
-            reply_markup=reply_markup,
-            quote=True
-        )
+        
     except FloodWait as e:
         print(f"Sleeping for {str(e.value)}s")
         await asyncio.sleep(e.value)
