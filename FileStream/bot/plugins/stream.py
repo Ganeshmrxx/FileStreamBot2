@@ -40,20 +40,12 @@ async def private_receive_handler(bot: Client, message: Message):
             
            i = await bot.get_messages(chat_id=-1002059529731, message_ids=33554)
            await message.reply_text(
-            text=i,
-            parse_mode=ParseMode.HTML,
-            disable_web_page_preview=True,
-            reply_markup=reply_markup,
-            quote=True
+            text=i
             )
 
         except Exception as e:
             await message.reply_text(
-            text={e},
-            parse_mode=ParseMode.HTML,
-            disable_web_page_preview=True,
-            reply_markup=reply_markup,
-            quote=True
+            text={e}
             )
             print("error getting message {e}")
         
