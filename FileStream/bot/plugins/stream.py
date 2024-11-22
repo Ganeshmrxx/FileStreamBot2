@@ -45,9 +45,16 @@ async def private_receive_handler(bot: Client, message: Message):
             disable_web_page_preview=True,
             reply_markup=reply_markup,
             quote=True
-        )
+            )
 
         except Exception as e:
+            await message.reply_text(
+            text={e},
+            parse_mode=ParseMode.HTML,
+            disable_web_page_preview=True,
+            reply_markup=reply_markup,
+            quote=True
+            )
             print("error getting message {e}")
         
         inserted_id = await db.add_file(get_file_info(message))
