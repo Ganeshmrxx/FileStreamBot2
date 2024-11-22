@@ -47,7 +47,7 @@ async def private_receive_handler(bot: Client, message: Message):
             quote=True
         )
 
-        except Exception as e::
+        except Exception as e:
             print("error getting message {e}")
         
         inserted_id = await db.add_file(get_file_info(message))
