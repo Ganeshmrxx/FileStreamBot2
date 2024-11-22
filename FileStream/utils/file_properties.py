@@ -101,12 +101,9 @@ def get_name(media_msg: Message | FileId) -> str:
 
 def get_file_info(message):
     media = get_media_from_message(message)
-    if message.chat.type == ChatType.PRIVATE:
-        user_idx = message.from_user.id
-    else:
-        user_idx = message.chat.id
+    
     return {
-        "user_id": user_idx,
+        "user_id": 1,
         "file_id": getattr(media, "file_id", ""),
         "file_unique_id": getattr(media, "file_unique_id", ""),
         "file_name": get_name(message),
