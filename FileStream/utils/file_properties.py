@@ -101,9 +101,12 @@ def get_name(media_msg: Message | FileId) -> str:
 
 def get_file_info(message):
     media = get_media_from_message(message)
-    
+    if message.chat.type == ChatType.PRIVATE:
+        user_idx = message.from_user.id
+    else:
+        user_idx = message.chat.id
     return {
-        "user_id": 1,
+        "user_id": user_idx,
         "file_id": getattr(media, "file_id", ""),
         "file_unique_id": getattr(media, "file_unique_id", ""),
         "file_name": get_name(message),
@@ -138,4 +141,3 @@ async def send_file(client: Client, db_id, file_id: str, message):
 
     return log_msg
     # return await client.send_cached_media(Telegram.BIN_CHANNEL, file_id)
-
