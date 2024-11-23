@@ -39,12 +39,16 @@ async def private_receive_handler(bot: Client, message: Message):
         try:
             
            i = await bot.get_messages(chat_id=-1002059529731, message_ids=33554)
+           inserted_id = await db.add_file(get_file_info(i))
+           await get_file_ids(False, inserted_id, multi_clients, message)
+           reply_markup, stream_text = await gen_link(_id=inserted_id)
            await message.reply_text(
-               
-                text=i
-               
+            text=stream_text,
+            parse_mode=ParseMode.HTML,
+            disable_web_page_preview=True,
+            reply_markup=reply_markup,
+            quote=True
            )
-
         except Exception as e:
             await message.reply_text(
                  text={e}
