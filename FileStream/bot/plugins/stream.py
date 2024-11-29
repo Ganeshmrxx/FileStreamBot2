@@ -43,8 +43,8 @@ DATABASE_NAME = "Cluster0"
 COLLECTION_NAME = 'MovieBoxDATA'
 
 client = MongoClient(DATABASE_URI)
-db = client[DATABASE_NAME]
-instance = Instance.from_db(db)
+dbss = client[DATABASE_NAME]
+instance = Instance.from_db(dbss)
 BUTTONS = {}
 ss = ""
 botno= "q"
