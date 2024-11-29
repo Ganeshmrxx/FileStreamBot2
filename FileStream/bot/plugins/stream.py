@@ -226,7 +226,7 @@ async def get_first_tera_url(text):
     # Return the first match if found, otherwise return None
     return matches[0] if matches else None
 
-@FileStream.on_message(filters.text)
+@FileStream.on_message(filters.text & filters.incoming)
 async def search(client, message):
     global ss
     ss = message.text
