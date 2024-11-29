@@ -182,7 +182,7 @@ async def modify_filename(filename):
     clean_text = re.sub(r"(_|\-|\.|\+)", " ", clean_text)
     file_name = re.sub(r'\s+', ' ', clean_text).strip()
 
-    collection = db["replaceword"]
+    collection = dbss["replaceword"]
     all_documents = collection.find({})
 
     for document in all_documents:
