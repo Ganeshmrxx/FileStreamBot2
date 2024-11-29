@@ -276,7 +276,7 @@ async def search(client, message):
                     await message.reply_text(
                         f"Watch Now {random_url} 🎞️\n\n©️ <a href='https://t.me/{client.me.username}'>{client.me.first_name}</a>",
                         reply_markup=reply_markup,
-                        parse_mode="HTML"
+                        parse_mode=ParseMode.HTML
                     )
                 else:
                     group_btn = [
@@ -289,7 +289,7 @@ async def search(client, message):
                     await message.reply_text(
                         f"Watch now 🎞️ <b>{ss}</b>\n\n©️ <a href='https://t.me/{client.me.username}'>{client.me.first_name}</a>",
                         reply_markup=group_reply_markup,
-                        parse_mode="HTML"
+                        parse_mode=ParseMode.HTML
                     )
             else:
                 print("No URLs found in the XML.")
@@ -316,7 +316,7 @@ async def search(client, message):
                 chat_id=chat_id,
                 photo="https://graph.org/ipapkorn-check-speclling-07-25",
                 caption="<b>NOTE: We sent it to our uploader admin.</b>",
-                parse_mode="html"
+                parse_mode=ParseMode.HTML
             )
 
             await m.delete()
@@ -350,7 +350,7 @@ async def search(client, message):
         await m.edit_text(
             f"We Found Your Query 🎞️ <b>{ss}</b>\n\nTotal Files: {total_results}\n\n©️ <a href='https://t.me/{client.me.username}'>{client.me.first_name}</a>",
             reply_markup=reply_markup,
-            parse_mode="HTML"
+            parse_mode=ParseMode.HTML
         )
     
 
