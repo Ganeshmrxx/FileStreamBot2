@@ -11,13 +11,17 @@ from FileStream.server.exceptions import FIleNotFound
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from pyrogram.file_id import FileId, FileType, PHOTO_TYPES
 from pyrogram.enums.parse_mode import ParseMode
+import logging
 db = Database(Telegram.DATABASE_URL, Telegram.SESSION_NAME)
 botno= "q"
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 #---------------------[ START CMD ]---------------------#
 @FileStream.on_callback_query()
 async def cb_data(bot, update: CallbackQuery):
     usr_cmd = update.data.split("_")
+    logging.info("callback")
+    logging.info(usr_cmd)
     print("calback")
     print(usr_cmd)
    
