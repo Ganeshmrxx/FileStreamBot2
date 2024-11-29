@@ -239,63 +239,7 @@ async def search(client, message):
 
     # Handling "tera" in the query
     if "tera" in ss:
-        m = await message.reply_text(
-            text=f"Decrypting..\nPlease wait.. {username}\n\nSend me Terabox Link and Direct Play Here, No Ads"
-        )
-        print(ss)
-
-        # Simulate getting the first Terabox URL and converting it to an embed URL
-        first_tera_url = await get_first_tera_url(ss)
-        print(f"First URL with 'tera': {first_tera_url}")
-        embed_url = await convert_to_embed_url(first_tera_url)
-        print(f"Embed URL: {embed_url}")
-        rndlink = embed_url
-
-        # Fetching XML data for Terabox
-        url = "https://www.teraboxvip.com/sitemap.xml"
-        response = requests.get(url)
-
-        if response.status_code == 200:
-            xml_data = response.content
-            tree = ET.ElementTree(ET.fromstring(xml_data))
-            root = tree.getroot()
-            namespace = {'ns': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
-            urls = [url.find('ns:loc', namespace).text for url in root.findall('ns:url', namespace)]
-
-            # Selecting a random URL
-            if urls:
-                random_url = random.choice(urls)
-                random_url = f"{random_url}?terax={rndlink}"
-                print(f"Random URL: {random_url}")
-
-                web_app_info = WebAppInfo(url=random_url)
-                btn = [[InlineKeyboardButton(text="Watch now", web_app=web_app_info)]]
-                reply_markup = InlineKeyboardMarkup(btn)
-
-                if message.chat.type == "private":
-                    await message.reply_text(
-                        f"Watch Now {random_url} 🎞️\n\n©️ <a href='https://t.me/{client.me.username}'>{client.me.first_name}</a>",
-                        reply_markup=reply_markup,
-                        parse_mode=ParseMode.HTML
-                    )
-                else:
-                    group_btn = [
-                        [InlineKeyboardButton(
-                            text="Click Here",
-                            url=f"https://t.me/ipapkorn_v1_bot?start=senduserfile_{ss}_"
-                        )]
-                    ]
-                    group_reply_markup = InlineKeyboardMarkup(group_btn)
-                    await message.reply_text(
-                        f"Watch now 🎞️ <b>{ss}</b>\n\n©️ <a href='https://t.me/{client.me.username}'>{client.me.first_name}</a>",
-                        reply_markup=group_reply_markup,
-                        parse_mode=ParseMode.HTML
-                    )
-            else:
-                print("No URLs found in the XML.")
-        else:
-            print(f"Failed to fetch XML data. Status code: {response.status_code}")
-
+        print("tera here")
     # Handling general search queries
     else:
         m = await message.reply_text(
@@ -304,25 +248,9 @@ async def search(client, message):
         files, offset, total_results = await get_search_results(ss)
 
         if not files:
-            try:
-                await client.send_message(
-                    Muvi_requested_Files,
-                    f"{ss}"
-                )
-            except Exception as e:
-                logging.error(f"Failed to request new file: {e}")
-
-            await client.send_photo(
-                chat_id=chat_id,
-                photo="https://graph.org/ipapkorn-check-speclling-07-25",
-                caption="<b>NOTE: We sent it to our uploader admin.</b>",
-                parse_mode=ParseMode.HTML
-            )
-
-            await m.delete()
+            print("not found any file")
             return
 
-        response = f"Search results for '{ss}':\n"
         for file in files:
             response += f"{file.file_name}\n"
 
