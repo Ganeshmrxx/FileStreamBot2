@@ -12,6 +12,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQ
 from pyrogram.file_id import FileId, FileType, PHOTO_TYPES
 from pyrogram.enums.parse_mode import ParseMode
 import logging
+from database.ia_filterdb import Media, get_file_details, get_search_results
 
 db = Database(Telegram.DATABASE_URL, Telegram.SESSION_NAME)
 botno= f"https://t.me/"
