@@ -11,6 +11,203 @@ from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.enums.parse_mode import ParseMode
 db = Database(Telegram.DATABASE_URL, Telegram.SESSION_NAME)
 
+
+import base64
+import logging
+import math
+import requests
+
+import xml.etree.ElementTree as ET
+import random
+from struct import pack
+import re
+
+from pymongo import MongoClient
+from pyrogram.errors import MessageNotModified
+from umongo import Instance, Document, fields
+
+
+from pyrogram.file_id import FileId
+
+from info import officialchatid, bot_username, updatechannel, logDataChannel, DB01_MB, botid, DB02_MB, MUVI_Bots, \
+    Muvi_requested_Files
+
+
+# Enable logging
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+
+# Initialize the app with a service account, granting admin privileges
+# MongoDB information
+DATABASE_URI = "mongodb+srv://test:test05@cluster0.g05zxpa.mongodb.net/?retryWrites=true&w=majority"
+DATABASE_NAME = "Cluster0"
+COLLECTION_NAME = 'MovieBoxDATA'
+
+client = MongoClient(DATABASE_URI)
+db = client[DATABASE_NAME]
+instance = Instance.from_db(db)
+BUTTONS = {}
+ss = ""
+botno= "q"
+
+# url=f"http://t.me/{temp.U_NAME}?startgroup=true"
+# url=f"https://t.me/movieboxtv_bot?start=sendfile_{msgid}_{chatid}_{user_id}_{group_id}_no"
+@instance.register
+class Media(Document):
+    file_id = fields.StrField(attribute='_id')
+    file_ref = fields.StrField(allow_none=True)
+    file_name = fields.StrField(required=True)
+    file_size = fields.IntField(required=True)
+    file_msg_id = fields.IntField(allow_none=True)
+    file_channel_id = fields.IntField(allow_none=True)
+    caption = fields.StrField(allow_none=True)
+
+    class Meta:
+        collection_name = COLLECTION_NAME
+
+
+@instance.register
+class GMedia(Document):
+    _id = fields.IntField(attribute='_id')
+    group_id = fields.StrField(allow_none=True)
+    group_name = fields.StrField(allow_none=True)
+    group_members = fields.IntField(allow_none=True)
+    groupusername = fields.StrField(allow_none=True)
+    group_owner_id = fields.IntField(allow_none=True)
+    group_owner_name = fields.StrField(allow_none=True)
+    group_owner_earn = fields.IntField(allow_none=True)
+
+    class Meta:
+        collection_name = "newGroups_2in1"
+
+
+@FileStream.on_message(filters.text)
+async def search(client, message):
+    global ss
+    ss = message.text
+    chat_id = message.chat.id
+    user_id = message.from_user.id
+    username = f"@{message.from_user.username}" if message.from_user.username else "notFound"
+    group_id = message.chat.id
+
+    logging.info(f"Received query: {ss}")
+
+    # Handling "tera" in the query
+    if "tera" in ss:
+        m = await message.reply_text(
+            text=f"Decrypting..\nPlease wait.. {username}\n\nSend me Terabox Link and Direct Play Here, No Ads"
+        )
+        print(ss)
+
+        # Simulate getting the first Terabox URL and converting it to an embed URL
+        first_tera_url = get_first_tera_url(ss)
+        print(f"First URL with 'tera': {first_tera_url}")
+        embed_url = convert_to_embed_url(first_tera_url)
+        print(f"Embed URL: {embed_url}")
+        rndlink = embed_url
+
+        # Fetching XML data for Terabox
+        url = "https://www.teraboxvip.com/sitemap.xml"
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            xml_data = response.content
+            tree = ET.ElementTree(ET.fromstring(xml_data))
+            root = tree.getroot()
+            namespace = {'ns': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
+            urls = [url.find('ns:loc', namespace).text for url in root.findall('ns:url', namespace)]
+
+            # Selecting a random URL
+            if urls:
+                random_url = random.choice(urls)
+                random_url = f"{random_url}?terax={rndlink}"
+                print(f"Random URL: {random_url}")
+
+                web_app_info = WebAppInfo(url=random_url)
+                btn = [[InlineKeyboardButton(text="Watch now", web_app=web_app_info)]]
+                reply_markup = InlineKeyboardMarkup(btn)
+
+                if message.chat.type == "private":
+                    await message.reply_text(
+                        f"Watch Now {random_url} 🎞️\n\n©️ <a href='https://t.me/{client.me.username}'>{client.me.first_name}</a>",
+                        reply_markup=reply_markup,
+                        parse_mode="HTML"
+                    )
+                else:
+                    group_btn = [
+                        [InlineKeyboardButton(
+                            text="Click Here",
+                            url=f"https://t.me/ipapkorn_v1_bot?start=senduserfile_{ss}_"
+                        )]
+                    ]
+                    group_reply_markup = InlineKeyboardMarkup(group_btn)
+                    await message.reply_text(
+                        f"Watch now 🎞️ <b>{ss}</b>\n\n©️ <a href='https://t.me/{client.me.username}'>{client.me.first_name}</a>",
+                        reply_markup=group_reply_markup,
+                        parse_mode="HTML"
+                    )
+            else:
+                print("No URLs found in the XML.")
+        else:
+            print(f"Failed to fetch XML data. Status code: {response.status_code}")
+
+    # Handling general search queries
+    else:
+        m = await message.reply_text(
+            text=f"Searching.. {ss}\nPlease Wait.. {username}\n\nSend me Terabox Link and Direct Play Here, No Ads"
+        )
+        files, offset, total_results = get_search_results(ss)
+
+        if not files:
+            try:
+                await client.send_message(
+                    Muvi_requested_Files,
+                    f"{ss}"
+                )
+            except Exception as e:
+                logging.error(f"Failed to request new file: {e}")
+
+            await client.send_photo(
+                chat_id=chat_id,
+                photo="https://graph.org/ipapkorn-check-speclling-07-25",
+                caption="<b>NOTE: We sent it to our uploader admin.</b>",
+                parse_mode="html"
+            )
+
+            await m.delete()
+            return
+
+        response = f"Search results for '{ss}':\n"
+        for file in files:
+            response += f"{file.file_name}\n"
+
+        btn = [
+            [
+                InlineKeyboardButton(
+                    text=f"[{get_size(file.file_size)}]💠{modify_filename(file.file_name)}",
+                    url=f'{botno}sendfile_{file.file_msg_id}_{file.file_channel_id}_{user_id}_{group_id}'
+                )
+            ]
+            for file in files
+        ]
+
+        if offset:
+            key = f"{message.chat.id}-{message.message_id}"
+            BUTTONS[key] = search
+            btn.append([
+                InlineKeyboardButton(text=f"🗓 1/{math.ceil(int(total_results) / 10)}", callback_data="pages"),
+                InlineKeyboardButton(text="Next ›››", callback_data=f"next_{user_id}_{key}_{offset}_{user_id}_{group_id}")
+            ])
+        else:
+            btn.append([InlineKeyboardButton(text="🗓 No More Results", callback_data="pages")])
+
+        reply_markup = InlineKeyboardMarkup(btn)
+        await m.edit_text(
+            f"We Found Your Query 🎞️ <b>{ss}</b>\n\nTotal Files: {total_results}\n\n©️ <a href='https://t.me/{client.me.username}'>{client.me.first_name}</a>",
+            reply_markup=reply_markup,
+            parse_mode="HTML"
+        )
+    
+
 @FileStream.on_message(
     filters.private
     & (
