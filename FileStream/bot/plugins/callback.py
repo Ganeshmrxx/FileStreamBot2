@@ -18,8 +18,9 @@ botno= "q"
 @FileStream.on_callback_query()
 async def cb_data(bot, update: CallbackQuery):
     usr_cmd = update.data.split("_")
-    usr_cmd = update.data.split("_")
-
+    print("calback")
+    print(usr_cmd)
+   
     # Handle pagination logic when the callback starts with "next_"
     if usr_cmd[0] == "next_":
         if len(usr_cmd) < 6:
@@ -103,10 +104,8 @@ async def cb_data(bot, update: CallbackQuery):
         except MessageNotModified:
             await update.answer("Nothing changed in this message.")
 
-    else:
-        # Handle other callback commands here
-        await update.answer("Command not recognized.", show_alert=True)
-    if usr_cmd[0] == "home":
+   
+    elif usr_cmd[0] == "home":
         await update.message.edit_text(
             text=LANG.START_TEXT.format(update.from_user.mention, FileStream.username),
             disable_web_page_preview=True,
