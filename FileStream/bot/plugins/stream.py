@@ -47,7 +47,7 @@ dbss = client[DATABASE_NAME]
 instance = Instance.from_db(dbss)
 BUTTONS = {}
 ss = ""
-botno= "q"
+botno= f"https://t.me/"
 
 # url=f"http://t.me/{temp.U_NAME}?startgroup=true"
 # url=f"https://t.me/movieboxtv_bot?start=sendfile_{msgid}_{chatid}_{user_id}_{group_id}_no"
