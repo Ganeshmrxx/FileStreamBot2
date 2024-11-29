@@ -12,6 +12,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQ
 from pyrogram.file_id import FileId, FileType, PHOTO_TYPES
 from pyrogram.enums.parse_mode import ParseMode
 import logging
+from FileStream.bot.plugins import BUTTONS
 db = Database(Telegram.DATABASE_URL, Telegram.SESSION_NAME)
 botno= "q"
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
