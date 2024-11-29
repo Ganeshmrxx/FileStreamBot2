@@ -251,8 +251,6 @@ async def search(client, message):
             print("not found any file")
             return
 
-        for file in files:
-            response += f"{file.file_name}\n"
 
         btn = [
             [
@@ -281,7 +279,7 @@ async def search(client, message):
             parse_mode=ParseMode.HTML
         )
     
-
+"""
 @FileStream.on_message(
     filters.private
     & (
@@ -344,6 +342,7 @@ async def private_receive_handler(bot: Client, message: Message):
                                text=f"Gᴏᴛ FʟᴏᴏᴅWᴀɪᴛ ᴏғ {str(e.value)}s ғʀᴏᴍ [{message.from_user.first_name}](tg://user?id={message.from_user.id})\n\n**ᴜsᴇʀ ɪᴅ :** `{str(message.from_user.id)}`",
                                disable_web_page_preview=True, parse_mode=ParseMode.MARKDOWN)
 
+"""
 
 @FileStream.on_message(
     filters.channel
