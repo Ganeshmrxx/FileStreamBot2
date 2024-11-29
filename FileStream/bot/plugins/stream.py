@@ -337,7 +337,7 @@ async def search(client, message):
         ]
 
         if offset:
-            key = f"{message.chat.id}-{message.message_id}"
+            key = f"{message.chat.id}-{message.id}"
             BUTTONS[key] = search
             btn.append([
                 InlineKeyboardButton(text=f"🗓 1/{math.ceil(int(total_results) / 10)}", callback_data="pages"),
