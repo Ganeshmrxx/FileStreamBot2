@@ -273,7 +273,7 @@ async def search(client, message):
             btn.append([InlineKeyboardButton(text="🗓 No More Results", callback_data="pages")])
 
         reply_markup = InlineKeyboardMarkup(btn)
-        await m.edit_text(
+        await m.edit_message_text(
             f"We Found Your Query 🎞️ <b>{ss}</b>\n\nTotal Files: {total_results}\n\n©️ <a href='https://t.me/{client.me.username}'>{client.me.first_name}</a>",
             reply_markup=reply_markup,
             parse_mode=ParseMode.HTML
