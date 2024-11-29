@@ -47,10 +47,7 @@ async def cb_data(bot, update: CallbackQuery):
 
         # Retrieve search function or data
         search = BUTTONS.get(key)
-        if not search:
-            await update.answer("You are using an outdated message. Please send your request again.", show_alert=True)
-            return
-
+    
         # Fetch the search results for the next page
         files, n_offset, total = get_search_results(ss, offset=offset, filter=True)
         try:
