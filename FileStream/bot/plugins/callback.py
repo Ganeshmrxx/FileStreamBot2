@@ -26,7 +26,7 @@ async def cb_data(bot, update: CallbackQuery):
     print(usr_cmd)
    
     # Handle pagination logic when the callback starts with "next_"
-    if usr_cmd[0] == "next_":
+    if usr_cmd[0] == "next":
         if len(usr_cmd) < 6:
             await update.answer("Invalid callback data.", show_alert=True)
             return
