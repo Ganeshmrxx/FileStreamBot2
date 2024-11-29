@@ -12,6 +12,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQ
 from pyrogram.file_id import FileId, FileType, PHOTO_TYPES
 from pyrogram.enums.parse_mode import ParseMode
 db = Database(Telegram.DATABASE_URL, Telegram.SESSION_NAME)
+botno= "q"
 
 #---------------------[ START CMD ]---------------------#
 @FileStream.on_callback_query()
