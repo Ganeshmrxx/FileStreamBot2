@@ -79,7 +79,7 @@ class GMedia(Document):
     class Meta:
         collection_name = "newGroups_2in1"
 
-def get_search_results(query, file_type=None, max_results=(10), offset=0, filter=False):
+async def get_search_results(query, file_type=None, max_results=(10), offset=0, filter=False):
     query = query.strip()
     if not query:
         raw_pattern = '.'
@@ -112,7 +112,7 @@ def get_search_results(query, file_type=None, max_results=(10), offset=0, filter
     return files, next_offset, total_results
 
 
-def get_file_details(query):
+async def get_file_details(query):
     filter = {'file_id': query}
     cursor = Media.find(filter)
     # filedetails = cursor.to_list(length=1)
@@ -120,7 +120,7 @@ def get_file_details(query):
     return filedetails
 
 
-def get_size(size):
+async def get_size(size):
     """Get size in readable format"""
 
     units = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB"]
@@ -133,7 +133,7 @@ def get_size(size):
     return "%.0f %s" % (size, units[i])
 
 
-def encode_file_id(s: bytes) -> str:
+async def encode_file_id(s: bytes) -> str:
     r = b""
     n = 0
 
@@ -150,11 +150,11 @@ def encode_file_id(s: bytes) -> str:
     return base64.urlsafe_b64encode(r).decode().rstrip("=")
 
 
-def encode_file_ref(file_ref: bytes) -> str:
+async def encode_file_ref(file_ref: bytes) -> str:
     return base64.urlsafe_b64encode(file_ref).decode().rstrip("=")
 
 
-def unpack_new_file_id(new_file_id):
+async def unpack_new_file_id(new_file_id):
     """Return file_id, file_ref"""
     decoded = FileId.decode(new_file_id)
     file_id = encode_file_id(
@@ -170,7 +170,7 @@ def unpack_new_file_id(new_file_id):
     return file_id, file_ref
 
 
-def modify_filename(filename):
+async def modify_filename(filename):
     # Perform your modifications to the filename here
     # For example, let's add a prefix "Modified_" to the filename
     name = filename
@@ -199,7 +199,7 @@ def modify_filename(filename):
     return file_name
 
 
-def convert_to_embed_url(original_url):
+async def convert_to_embed_url(original_url):
     # Check if it's a valid Terabox URL
     if "tera" in original_url:
         # Extract the unique identifier (surl) part
@@ -216,7 +216,7 @@ def convert_to_embed_url(original_url):
 
 
 # Example original URL
-def get_first_tera_url(text):
+async def get_first_tera_url(text):
     # Regular expression to find URLs with "tera" in them
     url_pattern = r"https?://\S*tera\S*"
 
@@ -245,9 +245,9 @@ async def search(client, message):
         print(ss)
 
         # Simulate getting the first Terabox URL and converting it to an embed URL
-        first_tera_url = get_first_tera_url(ss)
+        first_tera_url = await get_first_tera_url(ss)
         print(f"First URL with 'tera': {first_tera_url}")
-        embed_url = convert_to_embed_url(first_tera_url)
+        embed_url = await convert_to_embed_url(first_tera_url)
         print(f"Embed URL: {embed_url}")
         rndlink = embed_url
 
@@ -301,7 +301,7 @@ async def search(client, message):
         m = await message.reply_text(
             text=f"Searching.. {ss}\nPlease Wait.. {username}\n\nSend me Terabox Link and Direct Play Here, No Ads"
         )
-        files, offset, total_results = get_search_results(ss)
+        files, offset, total_results = await get_search_results(ss)
 
         if not files:
             try:
@@ -329,7 +329,7 @@ async def search(client, message):
         btn = [
             [
                 InlineKeyboardButton(
-                    text=f"[{get_size(file.file_size)}]💠{modify_filename(file.file_name)}",
+                    text=f"[{await get_size(file.file_size)}]💠{await modify_filename(file.file_name)}",
                     url=f'{botno}sendfile_{file.file_msg_id}_{file.file_channel_id}_{user_id}_{group_id}'
                 )
             ]
