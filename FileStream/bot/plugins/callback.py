@@ -23,6 +23,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 @FileStream.on_callback_query()
 async def cb_data(bot, update: CallbackQuery):
     usr_cmd = update.data.split("_")
+    logging.info("caback")
    
     # Handle pagination logic when the callback starts with "next_"
     if usr_cmd[0] == "help":
