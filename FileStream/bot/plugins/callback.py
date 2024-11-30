@@ -12,7 +12,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQ
 from pyrogram.file_id import FileId, FileType, PHOTO_TYPES
 from pyrogram.enums.parse_mode import ParseMode
 import logging
-from database.ia_filterdb import Media, get_file_details, get_search_results
+from database import Media, get_file_details, get_search_results
 
 db = Database(Telegram.DATABASE_URL, Telegram.SESSION_NAME)
 botno= f"https://t.me/"
@@ -50,7 +50,7 @@ async def cb_data(bot, update: CallbackQuery):
         search = BUTTONS.get(key)
     
         # Fetch the search results for the next page
-        files, n_offset, total = get_search_results(ss, offset=offset, filter=True)
+        files, n_offset, total = await get_search_results(ss, offset=offset, filter=True)
         try:
             n_offset = int(n_offset)
         except ValueError:
