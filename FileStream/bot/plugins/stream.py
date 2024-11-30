@@ -326,7 +326,7 @@ async def cb_data(bot, update: CallbackQuery):
         btn = [
             [
                 InlineKeyboardButton(
-                    text=f"[{get_size(file.file_size)}]💠{modify_filename(file.file_name)}",
+                    text=f"[{await get_size(file.file_size)}]💠{await modify_filename(file.file_name)}",
                     url=f'{botno}sendfile_{file.file_msg_id}_{file.file_channel_id}_{user_id}_{group_id}'
                 )
             ]
