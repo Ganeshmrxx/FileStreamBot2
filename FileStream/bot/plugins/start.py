@@ -60,7 +60,8 @@ async def start(bot: Client, message: Message):
         elif "streamnew_" in message.text:
             try:
                 print("hello")
-                usr_cmd = update.data.split("_")
+                usr_cmd = message.text.split("_")
+              
                 req, mid, cid, user_id, group_id = usr_cmd
                 try:
                     i = await bot.get_messages(chat_id=cid, message_ids=mid)
