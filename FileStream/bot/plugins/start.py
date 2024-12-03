@@ -57,6 +57,13 @@ async def start(bot: Client, message: Message):
                 await message.reply_text("Something Went Wrong")
                 logging.error(e)
 
+        elif "streamnew_" in message.text:
+            try:
+                print("hello")
+            except Exception as e:
+                logging.error(e)
+
+
         elif "file_" in message.text:
             try:
                 file_check = await db.get_file(usr_cmd)
