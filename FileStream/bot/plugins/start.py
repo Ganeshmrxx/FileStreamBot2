@@ -59,7 +59,7 @@ async def start(bot: Client, message: Message):
 
         elif "streamnew_" in message.text:
             try:
-                logging.error("streamnew here)
+                logging.error("streamnew here")
                 print("hello")
                 usr_cmd = message.text.split("_")
                 logging.error(usr_cmd)
