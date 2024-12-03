@@ -281,7 +281,8 @@ async def search(client, message):
             [
                 InlineKeyboardButton(
                     text=f"[{await get_size(file.file_size)}]💠{await modify_filename(file.file_name)}",
-                    url=f'{botno}sendfile_{file.file_msg_id}_{file.file_channel_id}_{user_id}_{group_id}'
+                    url=f"https://t.me/{FileStream.username}?start=streamnew_{file.file_msg_id}_{file.file_channel_id}_{user_id}_{group_id}"
+                   
                 )
             ]
             for file in files
