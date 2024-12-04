@@ -249,63 +249,6 @@ async def get_first_tera_url(text):
     # Return the first match if found, otherwise return None
     return matches[0] if matches else None
 
-@FileStream.on_message(filters.text & filters.incoming & ~filters.command)
-async def search(client, message):
-    if message.text.startswith("/"):
-        logging.error("hgggg here")
-        return  # Ignore commands
-    global ss
-    ss = message.text
-    chat_id = message.chat.id
-    user_id = message.from_user.id
-    username = f"@{message.from_user.username}" if message.from_user.username else "notFound"
-    group_id = message.chat.id
-
-    logging.info(f"Received query: {ss}")
-
-    # Handling "tera" in the query
-    if "tera" in ss:
-        print("tera here")
-    # Handling general search queries
-    else:
-        m = await message.reply_text(
-            text=f"Searching.. {ss}\nPlease Wait.. {username}\n\nSend me Terabox Link and Direct Play Here, No Ads"
-        )
-        files, offset, total_results = await get_search_results(ss)
-
-        if not files:
-            print("not found any file")
-            return
-
-
-        btn = [
-            [
-                InlineKeyboardButton(
-                    text=f"[{await get_size(file.file_size)}]💠{await modify_filename(file.file_name)}",
-                    url=f"https://t.me/{FileStream.username}?start=streamnew_{file.file_msg_id}_{file.file_channel_id}_{user_id}_{group_id}"
-                   
-                )
-            ]
-            for file in files
-        ]
-
-        if offset:
-            key = f"{message.chat.id}-{message.id}"
-            BUTTONS[key] = search
-            btn.append([
-                InlineKeyboardButton(text=f"🗓 1/{math.ceil(int(total_results) / 10)}", callback_data="pages"),
-                InlineKeyboardButton(text="Next ›››", callback_data=f"next_{user_id}_{key}_{offset}_{user_id}_{group_id}")
-            ])
-        else:
-            btn.append([InlineKeyboardButton(text="🗓 No More Results", callback_data="pages")])
-
-        reply_markup = InlineKeyboardMarkup(btn)
-     
-        await message.reply_text(
-            f"We Found Your Query 🎞️ <b>{ss}</b>\n\nTotal Files: {total_results}\n\n©️ <a href='https://t.me/{client.me.username}'>{client.me.first_name}</a>",
-            reply_markup=reply_markup,
-            parse_mode=ParseMode.HTML
-        )
 
 @FileStream.on_message(filters.command('start') & filters.private)
 async def start(bot: Client, message: Message):
@@ -330,6 +273,7 @@ async def start(bot: Client, message: Message):
                 reply_markup=BUTTON.START_BUTTONS
             )
     else:
+        
         if "stream_" in message.text:
             try:
                 file_check = await db.get_file(usr_cmd)
@@ -351,7 +295,41 @@ async def start(bot: Client, message: Message):
                 await message.reply_text("Something Went Wrong")
                 logging.error(e)
 
+        elif "streamnew_" in message.text:
+            try:
+                logging.error("streamnew here")
+                print("hello")
+                usr_cmd = message.text.split("_")
+                req, mid, cid, user_id, group_id = usr_cmd
+                try:
+                    logging.error(f"Fetching message from chat: -1002059529731, message_id: {mid}")
+                    i = await bot.get_messages(chat_id=-1002059529731, message_ids=int(mid))
+                    logging.error("Message fetched successfully.")
+                    logging.error(i)
+
+                    # Validate file info
+                    file_info = get_file_info(i)
+                    if not file_info:
+                        await message.reply_text("Failed to extract file info.")
+                        return
+
+                    inserted_id = await db.add_file(file_info)
+                    reply_markup, stream_text = await gen_link(_id=inserted_id)
+                    await message.reply_text(
+                           text=stream_text,
+                           parse_mode=ParseMode.HTML,
+                           disable_web_page_preview=True,
+                           reply_markup=reply_markup,
+                           quote=True
+                    )
         
+                except Exception as e:
+                    logging.error(f"Error in processing: {e}")
+                    await message.reply_text(f"An error occurred: {str(e)}")
+
+            except Exception as e:
+               logging.error(f"Outer error: {e}")
+               await message.reply_text(f"An unexpected error occurred: {str(e)}")
 
 
         elif "file_" in message.text:
@@ -442,6 +420,67 @@ async def my_files(bot: Client, message: Message):
     await message.reply_photo(photo=Telegram.FILE_PIC,
                               caption="Total files: {}".format(total_files),
                               reply_markup=InlineKeyboardMarkup(file_list))
+
+
+
+
+@FileStream.on_message(filters.text & filters.incoming )
+async def search(client, message):
+    if message.text.startswith("/"):
+        logging.error("hgggg here")
+        return  # Ignore commands
+    global ss
+    ss = message.text
+    chat_id = message.chat.id
+    user_id = message.from_user.id
+    username = f"@{message.from_user.username}" if message.from_user.username else "notFound"
+    group_id = message.chat.id
+
+    logging.info(f"Received query: {ss}")
+
+    # Handling "tera" in the query
+    if "tera" in ss:
+        print("tera here")
+    # Handling general search queries
+    else:
+        m = await message.reply_text(
+            text=f"Searching.. {ss}\nPlease Wait.. {username}\n\nSend me Terabox Link and Direct Play Here, No Ads"
+        )
+        files, offset, total_results = await get_search_results(ss)
+
+        if not files:
+            print("not found any file")
+            return
+
+
+        btn = [
+            [
+                InlineKeyboardButton(
+                    text=f"[{await get_size(file.file_size)}]💠{await modify_filename(file.file_name)}",
+                    url=f"https://t.me/{FileStream.username}?start=streamnew_{file.file_msg_id}_{file.file_channel_id}_{user_id}_{group_id}"
+                   
+                )
+            ]
+            for file in files
+        ]
+
+        if offset:
+            key = f"{message.chat.id}-{message.id}"
+            BUTTONS[key] = search
+            btn.append([
+                InlineKeyboardButton(text=f"🗓 1/{math.ceil(int(total_results) / 10)}", callback_data="pages"),
+                InlineKeyboardButton(text="Next ›››", callback_data=f"next_{user_id}_{key}_{offset}_{user_id}_{group_id}")
+            ])
+        else:
+            btn.append([InlineKeyboardButton(text="🗓 No More Results", callback_data="pages")])
+
+        reply_markup = InlineKeyboardMarkup(btn)
+     
+        await message.reply_text(
+            f"We Found Your Query 🎞️ <b>{ss}</b>\n\nTotal Files: {total_results}\n\n©️ <a href='https://t.me/{client.me.username}'>{client.me.first_name}</a>",
+            reply_markup=reply_markup,
+            parse_mode=ParseMode.HTML
+        )
 
 
 @FileStream.on_callback_query()
