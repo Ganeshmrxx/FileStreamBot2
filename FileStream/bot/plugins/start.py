@@ -67,6 +67,7 @@ async def start(bot: Client, message: Message):
                 req, mid, cid, user_id, group_id = usr_cmd
                 try:
                     i = await bot.get_messages(chat_id=cid, message_ids=mid)
+                    logging.error(i)
                     inserted_id = await db.add_file(get_file_info(i))
                     await get_file_ids(False, inserted_id, multi_clients, message)
                     reply_markup, stream_text = await gen_link(_id=inserted_id)
