@@ -252,6 +252,7 @@ async def get_first_tera_url(text):
 @FileStream.on_message(filters.text & filters.incoming)
 async def search(client, message):
     if message.text.startswith("/"):
+        logging.error("hgggg here")
         return  # Ignore commands
     global ss
     ss = message.text
