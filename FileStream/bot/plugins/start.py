@@ -16,6 +16,7 @@ db = Database(Telegram.DATABASE_URL, Telegram.SESSION_NAME)
 
 @FileStream.on_message(filters.command('start') & filters.private)
 async def start(bot: Client, message: Message):
+    logging.error("h here")
     if not await verify_user(bot, message):
         return
     usr_cmd = message.text.split("_")[-1]
