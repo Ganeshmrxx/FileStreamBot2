@@ -13,7 +13,7 @@ from pyrogram.enums.parse_mode import ParseMode
 import asyncio
 
 db = Database(Telegram.DATABASE_URL, Telegram.SESSION_NAME)
-
+"""
 @FileStream.on_message(filters.command('start') & filters.private)
 async def start(bot: Client, message: Message):
     logging.error("h here")
@@ -150,4 +150,4 @@ async def my_files(bot: Client, message: Message):
                               caption="Total files: {}".format(total_files),
                               reply_markup=InlineKeyboardMarkup(file_list))
 
-
+"""
