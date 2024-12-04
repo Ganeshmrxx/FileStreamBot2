@@ -253,8 +253,7 @@ async def get_first_tera_url(text):
 @FileStream.on_message(filters.command('start') & filters.private)
 async def start(bot: Client, message: Message):
     logging.error("h here")
-    if not await verify_user(bot, message):
-        return
+    
     usr_cmd = message.text.split("_")[-1]
 
     if usr_cmd == "/start":
