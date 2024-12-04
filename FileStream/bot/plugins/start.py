@@ -58,37 +58,7 @@ async def start(bot: Client, message: Message):
                 await message.reply_text("Something Went Wrong")
                 logging.error(e)
 
-        elif "streamnew_" in message.text:
-            try:
-                logging.error("streamnew here")
-                print("hello")
-                usr_cmd = message.text.split("_")
-                logging.error(usr_cmd)
-              
-                req, mid, cid, user_id, group_id = usr_cmd
-                try:
-                    i = await bot.get_messages(chat_id=-1002059529731, message_ids=33922)
-                    logging.error("msgget")
-                    logging.error(i)
-                    inserted_id = await db.add_file(get_file_info(i))
-                    await get_file_ids(False, inserted_id, multi_clients, message)
-                    reply_markup, stream_text = await gen_link(_id=inserted_id)
-                    await message.reply_text(
-                        text=stream_text,
-                        parse_mode=ParseMode.HTML,
-                        disable_web_page_preview=True,
-                        reply_markup=reply_markup,
-                        quote=True
-                    )
-                except Exception as e:
-                    await message.reply_text(
-                        text={e}
-                    )
-                        
-
-                        
-            except Exception as e:
-                logging.error(e)
+        
 
 
         elif "file_" in message.text:
