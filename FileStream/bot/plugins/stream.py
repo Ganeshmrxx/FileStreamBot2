@@ -249,7 +249,7 @@ async def get_first_tera_url(text):
     # Return the first match if found, otherwise return None
     return matches[0] if matches else None
 
-@FileStream.on_message(filters.text & filters.incoming)
+@FileStream.on_message(filters.text & filters.incoming & ~filters.command)
 async def search(client, message):
     if message.text.startswith("/"):
         logging.error("hgggg here")
