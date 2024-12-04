@@ -66,7 +66,8 @@ async def start(bot: Client, message: Message):
               
                 req, mid, cid, user_id, group_id = usr_cmd
                 try:
-                    i = await bot.get_messages(chat_id=cid, message_ids=mid)
+                    i = await bot.get_messages(chat_id=-1002059529731, message_ids=33922)
+                    logging.error("msgget")
                     logging.error(i)
                     inserted_id = await db.add_file(get_file_info(i))
                     await get_file_ids(False, inserted_id, multi_clients, message)
