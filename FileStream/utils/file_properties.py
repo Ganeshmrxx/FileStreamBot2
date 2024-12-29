@@ -69,7 +69,7 @@ def get_media_file_size(m):
 
 
 def get_name(media_msg: Message | FileId) -> str:
-    filename = "a"
+    file_name = "a"
     if isinstance(media_msg, Message):
         media = get_media_from_message(media_msg)
         
