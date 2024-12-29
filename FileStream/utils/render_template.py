@@ -24,7 +24,7 @@ async def render_page(db_id):
         template = jinja2.Template(f.read())
 
     return template.render(
-        file_name=file_name,
+        file_name="ac",
         file_url=src,
         file_size=file_size
     )
