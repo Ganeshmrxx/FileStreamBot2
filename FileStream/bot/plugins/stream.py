@@ -426,7 +426,7 @@ async def my_files(bot: Client, message: Message):
 @FileStream.on_message(filters.text & filters.incoming )
 async def search(client, message):
     if message.text.startswith("/"):
-        logging.error("hgggg here")
+        logging.error(message)
         return  # Ignore commands
     global ss
     ss = message.text
