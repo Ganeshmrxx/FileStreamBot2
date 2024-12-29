@@ -71,7 +71,8 @@ def get_media_file_size(m):
 def get_name(media_msg: Message | FileId) -> str:
     if isinstance(media_msg, Message):
         media = get_media_from_message(media_msg)
-        logging.log(media)
+        
+        logging.error(media)
         file_name = getattr(media, "file_name", "")
 
     elif isinstance(media_msg, FileId):
