@@ -791,7 +791,7 @@ async def private_receive_handler(bot: Client, message: Message):
                  text={e}
             )
             print("error getting message {e}")
-        
+        """
         inserted_id = await db.add_file(get_file_info(message))
         await get_file_ids(False, inserted_id, multi_clients, message)
         reply_markup, stream_text = await gen_link(_id=inserted_id)
@@ -802,6 +802,7 @@ async def private_receive_handler(bot: Client, message: Message):
             reply_markup=reply_markup,
             quote=True
         )
+"""
         
     except FloodWait as e:
         print(f"Sleeping for {str(e.value)}s")
