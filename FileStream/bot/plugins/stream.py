@@ -301,30 +301,26 @@ async def start(bot: Client, message: Message):
                 usr_cmd = message.text.split("_")
                 req, mid, cid, user_id, group_id = usr_cmd
                 try:
-                    logging.error(f"Fetching message from chat: -1002059529731, message_id: {mid}")
-                    i = await bot.get_messages(chat_id=-1002059529731, message_ids=int(mid))
-                    logging.error("Message fetched successfully.")
+                    i = await bot.get_messages(chat_id=int{cid}, message_ids=int{mid})
+                    logging.error("yhan aaya here")
                     logging.error(i)
-
-                    # Validate file info
-                    file_info = get_file_info(i)
-                    if not file_info:
-                        await message.reply_text("Failed to extract file info.")
-                        return
-
-                    inserted_id = await db.add_file(file_info)
+                    inserted_id = await db.add_file(get_file_info(i))
+                    await get_file_ids(False, inserted_id, multi_clients, message)
                     reply_markup, stream_text = await gen_link(_id=inserted_id)
                     await message.reply_text(
-                           text=stream_text,
-                           parse_mode=ParseMode.HTML,
-                           disable_web_page_preview=True,
-                           reply_markup=reply_markup,
-                           quote=True
+                        text=stream_text,
+                        parse_mode=ParseMode.HTML,
+                        disable_web_page_preview=True,
+                        reply_markup=reply_markup,
+                        quote=True
+
                     )
-        
+
                 except Exception as e:
-                    logging.error(f"Error in processing: {e}")
-                    await message.reply_text(f"An error occurred: {str(e)}")
+                    await message.reply_text(
+                        text={e}
+                    )
+
 
             except Exception as e:
                logging.error(f"Outer error: {e}")
