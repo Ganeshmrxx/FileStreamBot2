@@ -302,7 +302,7 @@ async def start(bot: Client, message: Message):
                 req, mid, cid, user_id, group_id = usr_cmd
                 logging.error(f"mid: {mid}, cid: {cid}")
                 try:
-                    i = await bot.get_messages(chat_id={cid}, message_ids=int{mid})
+                    i = await bot.get_messages(cid,mid)
                     logging.error("yhan aaya here")
                     logging.error(i)
                     inserted_id = await db.add_file(get_file_info(i))
