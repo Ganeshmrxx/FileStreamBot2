@@ -478,7 +478,7 @@ async def search(client, message):
 
         reply_markup = InlineKeyboardMarkup(btn)
      
-        await message.reply_text(
+        await message.edit_text(
             f"We Found Your Query 🎞️ <b>{ss}</b>\n\nTotal Files: {total_results}\n\n©️ <a href='https://t.me/{client.me.username}'>{client.me.first_name}</a>",
             reply_markup=reply_markup,
             parse_mode=ParseMode.HTML
@@ -530,7 +530,7 @@ async def cb_data(bot, update: CallbackQuery):
             [
                 InlineKeyboardButton(
                     text=f"[{await get_size(file.file_size)}]💠{await modify_filename(file.file_name)}",
-                    url=f'{botno}sendfile_{file.file_msg_id}_{file.file_channel_id}_{user_id}_{group_id}'
+                    url=f"https://t.me/{FileStream.username}?start=streamnew_{file.file_msg_id}_{file.file_channel_id}_{user_id}_{group_id}"
                 )
             ]
             for file in files
