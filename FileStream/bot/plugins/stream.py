@@ -300,6 +300,7 @@ async def start(bot: Client, message: Message):
                 print("hello")
                 usr_cmd = message.text.split("_")
                 req, mid, cid, user_id, group_id = usr_cmd
+                logging.error(f"mid: {mid}, cid: {cid}")
                 try:
                     i = await bot.get_messages(chat_id={cid}, message_ids={mid})
                     logging.error("yhan aaya here")
@@ -317,6 +318,7 @@ async def start(bot: Client, message: Message):
                     )
 
                 except Exception as e:
+                    logging.error(f"get file error: {e}")
                     await message.reply_text(
                         text={e}
                     )
