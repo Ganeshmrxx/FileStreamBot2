@@ -307,8 +307,12 @@ async def start(bot: Client, message: Message):
                     logging.error("yhan aaya here")
                     logging.error(i)
                     inserted_id = await db.add_file(get_file_info(i))
+                    logging.error("yhan aaya 2")
+                    logging.error(inserted_id)
                     await get_file_ids(False, inserted_id, multi_clients, message)
                     reply_markup, stream_text = await gen_link(_id=inserted_id)
+                    logging.error("yhan aaya 3")
+                    logging.error(stream_text)
                     await message.reply_text(
                         text=stream_text,
                         parse_mode=ParseMode.HTML,
