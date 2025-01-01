@@ -303,7 +303,7 @@ async def start(bot: Client, message: Message):
                 logging.error(f"mid: {mid}, cid: {cid}")
                 logging.error(f"Type of mid: {type(mid)}, Type of cid: {type(cid)}")
                 try:
-                    i = await bot.get_messages(cid,mid)
+                    i = await bot.get_messages(int(cid),int(mid))
                     logging.error("yhan aaya here")
                     logging.error(i)
                     inserted_id = await db.add_file(get_file_info(i))
