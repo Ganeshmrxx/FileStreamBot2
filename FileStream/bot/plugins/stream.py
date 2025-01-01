@@ -301,6 +301,7 @@ async def start(bot: Client, message: Message):
                 usr_cmd = message.text.split("_")
                 req, mid, cid, user_id, group_id = usr_cmd
                 logging.error(f"mid: {mid}, cid: {cid}")
+                logging.error(f"Type of mid: {type(mid)}, Type of cid: {type(cid)}")
                 try:
                     i = await bot.get_messages(cid,mid)
                     logging.error("yhan aaya here")
