@@ -6,6 +6,7 @@ from FileStream.utils.database import Database
 from FileStream.utils.human_readable import humanbytes
 from FileStream.config import Telegram, Server
 from FileStream.bot import FileStream
+from FileStream.bot.plugins.stream import modify_filename
 import asyncio
 from typing import (
     Union
@@ -88,9 +89,10 @@ async def gen_link(_id):
     page_link = f"{Server.URL}watch/{_id}"
     stream_link = f"{Server.URL}dl/{_id}"
     file_link = f"https://t.me/{FileStream.username}?start=file_{_id}"
+    FILEN = await modify_filename(file_name)
 
     if "video" in mime_type:
-        stream_text = LANG.STREAM_TEXT.format(file_name, file_size, stream_link, page_link, file_link)
+        stream_text = LANG.STREAM_TEXT.format(FILEN, file_size)
         reply_markup = InlineKeyboardMarkup(
             [
                 [InlineKeyboardButton("sᴛʀᴇᴀᴍ", url=page_link), InlineKeyboardButton("ᴅᴏᴡɴʟᴏᴀᴅ", url=stream_link)],
