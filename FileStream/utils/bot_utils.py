@@ -110,7 +110,7 @@ async def gen_link(_id):
                 [InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close")]
             ]
         )
-    return reply_markup, stream_text, stream_text
+    return reply_markup, stream_text
 
 #---------------------[ GEN STREAM LINKS FOR CHANNEL ]---------------------#
 
