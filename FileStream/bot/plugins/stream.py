@@ -310,10 +310,10 @@ async def start(bot: Client, message: Message):
                     logging.error("yhan aaya 2")
                     logging.error(inserted_id)
                     await get_file_ids(False, inserted_id, multi_clients, i)
-                    reply_markup, stream_text, file_name, file_size = await gen_link(_id=inserted_id)
+                    reply_markup, stream_text, fname = await gen_link(_id=inserted_id)
                     logging.error("yhan aaya 3")
                     logging.error(stream_text)
-                    nname = modify_filename(file_name)
+                    nname = modify_filename(fname)
                     await message.reply_text(
                         text=nname,
                         parse_mode=ParseMode.HTML,
