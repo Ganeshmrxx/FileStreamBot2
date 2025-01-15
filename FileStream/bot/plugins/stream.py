@@ -315,9 +315,9 @@ async def start(bot: Client, message: Message):
                     except Exception as e:
                         logging.error(f" file get_file_ids: {e}")
                 
-                    reply_markup, stream_text = await gen_link(_id=inserted_id)
+                    reply_markup, stream_text, file_name = await gen_link(_id=inserted_id)
                     logging.error("yhan aaya 3")
-                    logging.error(stream_text)
+                    logging.error(file_name)
                     
                     await message.reply_text(
                         text=stream_text,
