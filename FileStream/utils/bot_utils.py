@@ -88,8 +88,7 @@ async def gen_link(_id):
     page_link = f"{Server.URL}watch/{_id}"
     stream_link = f"{Server.URL}dl/{_id}"
     file_link = f"https://t.me/{FileStream.username}?start=file_{_id}"
-    fname = LANG.STREAM_TEXT.format(file_name)
-    logging.error(fname)
+
 
     if "video" in mime_type:
         
