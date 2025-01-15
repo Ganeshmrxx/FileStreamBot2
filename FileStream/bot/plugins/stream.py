@@ -315,12 +315,13 @@ async def start(bot: Client, message: Message):
                     except Exception as e:
                         logging.error(f" file get_file_ids: {e}")
                 
-                    reply_markup, stream_text, file_name = await gen_link(_id=inserted_id)
+                    reply_markup, stream_text, file_name, file_size = await gen_link(_id=inserted_id)
                     logging.error("yhan aaya 3")
+                    nen = await modify_filename(file_name)
                     logging.error(file_name)
                     
                     await message.reply_text(
-                        text=stream_text,
+                        text=nen,
                         parse_mode=ParseMode.HTML,
                         disable_web_page_preview=True,
                         reply_markup=reply_markup,
