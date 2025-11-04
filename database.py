@@ -38,7 +38,7 @@ botno= f"https://t.me/"
 
 @instance.register
 class Media(Document):
-    file_id = fields.StrField(attribute='_id')
+    file_id = fields.StringField(attribute='_id', missing=None)
     file_ref = fields.StrField(allow_none=True)
     file_name = fields.StrField(required=True)
     file_size = fields.IntField(required=True)
@@ -52,7 +52,7 @@ class Media(Document):
 
 @instance.register
 class GMedia(Document):
-    _id = fields.IntField(attribute='_id')
+    _id = fields.StringField(attribute='_id', missing=None)
     group_id = fields.StrField(allow_none=True)
     group_name = fields.StrField(allow_none=True)
     group_members = fields.IntField(allow_none=True)
